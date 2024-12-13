@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot und Virtuelles Terminal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+    <style>
+        #chat-box {
+            height: 400px;
+            width: 300px;
+            overflow-y: scroll;
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        #message {
+            width: 80%;
+        }
+        #terminal {
+            height: 400px;
+            width: 100%;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chatbot und Virtuelles Terminal</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="message" placeholder="Ihre Nachricht...">
+    <button onclick="sendMessage()">Senden</button>
+
+    <h2>Virtuelles Terminal</h2>
+    <div id="terminal"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script>
+        // Chatbot-Funktionen
+        async function sendMessage() {
+            const message = document.getElementById("message").value;
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message })
+            });
+            const data = await response.json();
+            const chatBox = document.getElementById("chat-box");
+
+            if (data.response === "Bitte geben Sie Ihren mathematischen Ausdruck ein.") {
+                const expression = prompt("Geben Sie Ihren mathematischen Ausdruck ein:");
+                const calcResponse = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ expression: expression })
+                });
+                const calcData = await calcResponse.json();
+                if (calcData.result) {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Das Ergebnis ist ${calcData.result}</p>`;
+                } else {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Fehler: ${calcData.error}</p>`;
+                }
+            } else {
+                chatBox.innerHTML += `<p><strong>Sie:</strong> ${message}</p>`;
+                chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+            }
+
+            document.getElementById("message").value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Terminal erstellen
+        const term = new Terminal();
+        term.open(document.getElementById('terminal'));
+
+        // Beispielausgabe
+        term.write('Willkommen im virtuellen Terminal!\r\n$ ');
+
+        // Eingaben verarbeiten und an das Backend senden
+        term.onData(async e => {
+            switch (e) {
+                case '\r': // Enter
+                    // Lesen Sie nur die aktuelle Zeile ab dem Prompt
+                    const input = term.buffer.active.getLine(term.buffer.active.cursorY).translateToString().substring(2).trim();
+                    term.write('\r\n');
+
+                    if (input) {
+                        // Befehl an das Backend senden
+                        const response = await fetch('/execute', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ command: input })
+                        });
+                        const data = await response.json();
+
+                        if (data.output) {
+                            term.write(data.output);
+                        } else if (data.error) {
+                            term.write(`Fehler: ${data.error}`);
+                        }
+                    }
+
+                    term.write('\r\n$ ');
+                    break;
+                default:
+                    term.write(e);
+            }
+        });
+    </script>
+</body>
+</html>

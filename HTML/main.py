@@ -107,9 +107,13 @@ def main():
         choice = input("Ihre Wahl: ")
 
         if choice == '1':
-            message = input("Geben Sie Ihre Nachricht ein: ")
-            response = handle_chat(message)
-            print(f"Bot: {response['response']}")
+            while True:
+                message = input("Geben Sie Ihre Nachricht ein: ")
+                response = handle_chat(message)
+                print(f"Bot: {response['response']}")
+                if message == "exit":
+                    break
+                
 
         elif choice == '2':
             expression = input("Geben Sie den mathematischen Ausdruck ein: ")

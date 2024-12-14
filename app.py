@@ -2,8 +2,6 @@ import subprocess
 import sys
 import os
 import libdictionary as dict
-from flask import Flask, request, jsonify, render_template
-from groq import Groq
 
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", "--break-system-packages", package])
@@ -22,10 +20,26 @@ except ImportError:
     from flask import Flask, request, jsonify, render_template
 
 try:
-    import groq
+    from groq import Groq
 except ImportError:
     install("groq")
-    import groq
+    from groq import Groq
+
+try:
+    import requests
+except ImportError:
+    install("requests")
+    import requests
+
+try:
+    from bs4 import BeautifulSoup
+except:
+    install("beautifulsoup4 requests")
+    from bs4 import BeautifulSoup
+
+
+
+
 
 # API-Schlüssel direkt im Skript setzen
 os.environ["GROQ_API_KEY"] = "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"
@@ -56,9 +70,14 @@ def chat():
     if response == "Entschuldigung, das verstehe ich nicht. Können Sie das bitte anders formulieren?":
         chat_completion = client.chat.completions.create(
             messages=[
-                {"role": "user", "content": user_input}
+                {"role": "user", "content": user_input},
+                {"role": "system", "content": "You love math."}
             ],
-            model="llama3-8b-8192"
+            model="gemma2-9b-it",
+            temperature=1,
+            max_tokens=230,
+            top_p=1,
+            stop=None,
         )
         response = chat_completion.choices[0].message.content
     
@@ -73,6 +92,7 @@ def reverse():
         return jsonify({"result": reversed_text})
     else:
         return jsonify({"error": "Kein Text zum Umkehren angegeben."})
+
 
 # Route zur Überprüfung auf Palindrome
 @app.route('/palindrome', methods=['POST'])

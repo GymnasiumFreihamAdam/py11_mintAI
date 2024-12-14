@@ -9,4 +9,6 @@ pairs = [
     [r"(?i)auf wiedersehen", ["Auf Wiedersehen! Einen schönen Tag noch!",]],
     [r"(?i)mathematik", ["systemmath",]],
     [r"(?i)(.*)", ["Entschuldigung, das verstehe ich nicht. Können Sie das bitte anders formulieren?",]]
+    [r"(?i)paint", ["https://adambasly.github.io/learn/en/en.html",]],
+    [r"(?i)paint-tool", ["https://adambasly.github.io/learn/en/en.html",]],
 ]

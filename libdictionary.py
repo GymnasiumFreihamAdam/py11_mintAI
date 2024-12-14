@@ -6,10 +6,14 @@ pairs = [
     [r"(?i)urheber(.*)", ["Dies ist ein Projekt des Gymnasium Freihams. Code: Adam Basly. Grafik, Design & Co.: Jonas",]],
     [r"(?i)wie geht's(.*)", ["Mir geht es gut, danke! Wie geht es Ihnen?",]],
     [r"(?i)(.*)hilfe(.*)", ["Natürlich! Was benötigen Sie?",]],
-    [r"(?i)auf wiedersehen", ["Auf Wiedersehen! Einen schönen Tag noch!",]],
+    [r"(?i)au f wiedersehen", ["Auf Wiedersehen! Einen schönen Tag noch!",]],
     [r"(?i)mathematik", ["systemmath",]],
     [r"(?i)textumkehr", ["textumkehr",]],
-    [r"(?i)(.*)", ["Entschuldigung, das verstehe ich nicht. Können Sie das bitte anders formulieren?",]]
+    [r"(?i)learningservicesrepo", ["https://adambasly.github.io/learn/en/en.html",]],
     [r"(?i)paint", ["https://adambasly.github.io/learn/en/en.html",]],
     [r"(?i)paint-tool", ["https://adambasly.github.io/learn/en/en.html",]],
+    [r"(?i)suche", ["websearch",]],
+    [r"(?i)google suche", ["googlewebsearch",]],
+    [r"(?i)(.*)", ["Entschuldigung, das verstehe ich nicht. Können Sie das bitte anders formulieren?",]]
+    
 ]

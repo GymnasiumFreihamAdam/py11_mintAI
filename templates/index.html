@@ -4,6 +4,12 @@
     <title>Chatbot und Virtuelles Terminal</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
     <style>
+        body {
+            background-image: url('../pictures/py11.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
         #chat-box {
             height: 400px;
             width: 300px;
@@ -24,6 +30,7 @@
 </head>
 <body>
     <h1>Chatbot und Virtuelles Terminal</h1>
+    <h3 style="color: greenyellow; background-color: yellow; border-radius: 20px;">Ein Projekt des Gymnasium Freihams</h3>
     <div id="chat-box"></div>
     <input type="text" id="message" placeholder="Ihre Nachricht...">
     <button onclick="sendMessage()">Senden</button>
@@ -45,11 +52,20 @@
             });
             const data = await response.json();
             const chatBox = document.getElementById("chat-box");
-
-            if (data.response === "Bitte geben Sie Ihren mathematischen Ausdruck ein.") {
+            if (data.response === "websearch") {
+                const expression = prompt("Suchbegriff: ");
+                const seite = "https://www.bing.com/search?q="+expression+"&form=CHRDEF&sp=-1&lq=0&pq=hallo&sc=10-5&qs=n&sk=&cvid=3592196BD3BF46A09472C5B43A70442E&ghsh=0&ghacc=0&ghpl="
+                chatBox.innerHTML += `<p><strong>Bot:</strong> Was du suchst: <a href="${seite}">${seite}</a></p>`;
+                console.log("expression:" + expression)
+            } else if (data.response === "googlewebsearch") {
+                const expression = prompt("Suchbegriff: ");
+                const seite = "https://www.google.com/search?q="+expression+"&form=CHRDEF&sp=-1&lq=0&pq=hallo&sc=10-5&qs=n&sk=&cvid=3592196BD3BF46A09472C5B43A70442E&ghsh=0&ghacc=0&ghpl="
+                chatBox.innerHTML += `<p><strong>Bot:</strong> Was du suchst: <a href="${seite}">${seite}</a></p>`;
+                console.log("expression:" + expression)
+            } else if (data.response === "systemmath") {
                 const expression = prompt("Geben Sie Ihren mathematischen Ausdruck ein:");
                 const calcResponse = await fetch('/calculate', {
-                    method: 'POST',
+                  method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -75,6 +91,36 @@
                     chatBox.innerHTML += `<p><strong>Bot:</strong> Umgekehrter Text: ${reverseData.result}</p>`;
                 } else {
                     chatBox.innerHTML += `<p><strong>Bot:</strong> Fehler: ${reverseData.error}</p>`;
+                }
+            } else if (data.response.startsWith("palindrom")) {
+                const textToCheck = message.replace("palindrom", "").trim();
+                const palindromeResponse = await fetch('/palindrome', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: textToCheck })
+                });
+                const palindromeData = await palindromeResponse.json();
+                if (palindromeData.result !== undefined) {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Palindrom: ${palindromeData.result}</p>`;
+                } else {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Fehler: ${palindromeData.error}</p>`;
+                }
+            } else if (data.response.startsWith("konvertiere")) {
+                const [_, value, from_unit, to_unit] = message.split(" ");
+                const convertResponse = await fetch('/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ value: parseFloat(value), from_unit: from_unit, to_unit: to_unit })
+                });
+                const convertData = await convertResponse.json();
+                if (convertData.result) {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Konvertiertes Ergebnis: ${convertData.result}</p>`;
+                } else {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Fehler: ${convertData.error}</p>`;
                 }
             } else {
                 chatBox.innerHTML += `<p><strong>Sie:</strong> ${message}</p>`;

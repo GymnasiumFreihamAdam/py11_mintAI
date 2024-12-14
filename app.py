@@ -27,7 +27,6 @@ except ImportError:
     install("groq")
     import groq
 
-
 # API-Schlüssel direkt im Skript setzen
 os.environ["GROQ_API_KEY"] = "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"
 api_key = os.environ.get("GROQ_API_KEY")
@@ -35,7 +34,6 @@ if not api_key:
     raise ValueError("API-Schlüssel ist nicht gesetzt.")
 
 client = Groq(api_key=api_key)
-
 
 # Chatbot-Instanz erstellen
 from nltk.chat.util import Chat, reflections
@@ -51,7 +49,9 @@ def index():
 # Route für den Chatbot
 @app.route('/chat', methods=['POST'])
 def chat():
-    user_input = request.json.get("message")
+    data = request.json
+    user_input = data.get("message", "")
+    
     response = chatbot.respond(user_input)
     if response == "Entschuldigung, das verstehe ich nicht. Können Sie das bitte anders formulieren?":
         chat_completion = client.chat.completions.create(
@@ -61,9 +61,52 @@ def chat():
             model="llama3-8b-8192"
         )
         response = chat_completion.choices[0].message.content
-    elif response == "systemmath":
-        return jsonify({"response": "Bitte geben Sie Ihren mathematischen Ausdruck ein."})
+    
     return jsonify({"response": response})
+
+# Route für die Text-Umkehrung
+@app.route('/reverse', methods=['POST'])
+def reverse():
+    text = request.json.get("text")
+    if text is not None:
+        reversed_text = text[::-1]
+        return jsonify({"result": reversed_text})
+    else:
+        return jsonify({"error": "Kein Text zum Umkehren angegeben."})
+
+# Route zur Überprüfung auf Palindrome
+@app.route('/palindrome', methods=['POST'])
+def palindrome():
+    text = request.json.get("text")
+    if text is not None:
+        cleaned_text = ''.join(e for e in text if e.isalnum()).lower()
+        is_palindrome = cleaned_text == cleaned_text[::-1]
+        return jsonify({"result": is_palindrome})
+    else:
+        return jsonify({"error": "Kein Text zur Überprüfung angegeben."})
+
+# Route für die Einheiten-Konvertierung
+@app.route('/convert', methods=['POST'])
+def convert():
+    data = request.json
+    value = data.get("value")
+    from_unit = data.get("from_unit")
+    to_unit = data.get("to_unit")
+    if value is not None and from_unit is not None and to_unit is not None:
+        conversions = {
+            ("kilometer", "meile"): 0.621371,
+            ("meile", "kilometer"): 1.60934,
+            ("kilogramm", "pfund"): 2.20462,
+            ("pfund", "kilogramm"): 0.453592
+        }
+        key = (from_unit.lower(), to_unit.lower())
+        if key in conversions:
+            result = value * conversions[key]
+            return jsonify({"result": result})
+        else:
+            return jsonify({"error": "Konvertierung nicht unterstützt."})
+    else:
+        return jsonify({"error": "Ungültige Eingaben für die Einheitenkonvertierung."})
 
 # Route für den Rechner
 @app.route('/calculate', methods=['POST'])
@@ -79,7 +122,7 @@ def calculate():
 @app.route('/execute', methods=['POST'])
 def execute():
     command = request.json.get("command")
-    allowed_commands = ["ls", "pwd", "echo", "whoami","cd"]  # Sicherstellen, dass nur erlaubte Befehle ausgeführt werden
+    allowed_commands = ["ls", "pwd", "echo", "whoami", "cd"]  # Sicherstellen, dass nur erlaubte Befehle ausgeführt werden
     cmd = command.split()[0]
     if cmd in allowed_commands:
         try:

@@ -61,6 +61,21 @@
                 } else {
                     chatBox.innerHTML += `<p><strong>Bot:</strong> Fehler: ${calcData.error}</p>`;
                 }
+            } else if (data.response.startsWith("textumkehr")) {
+                const textToReverse = message.replace("textumkehr", "").trim();
+                const reverseResponse = await fetch('/reverse', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: textToReverse })
+                });
+                const reverseData = await reverseResponse.json();
+                if (reverseData.result) {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Umgekehrter Text: ${reverseData.result}</p>`;
+                } else {
+                    chatBox.innerHTML += `<p><strong>Bot:</strong> Fehler: ${reverseData.error}</p>`;
+                }
             } else {
                 chatBox.innerHTML += `<p><strong>Sie:</strong> ${message}</p>`;
                 chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
@@ -99,7 +114,7 @@
                         if (data.output) {
                             term.write(data.output);
                         } else if (data.error) {
-                            term.write(`Fehler: ${data.error}`);
+                            term.write(`Fehler: ${data.error} Bitte gebe einen Parameter mit.`);
                         }
                     }
 

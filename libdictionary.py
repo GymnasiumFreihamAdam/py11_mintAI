@@ -8,5 +8,6 @@ pairs = [
     [r"(?i)(.*)hilfe(.*)", ["Natürlich! Was benötigen Sie?",]],
     [r"(?i)auf wiedersehen", ["Auf Wiedersehen! Einen schönen Tag noch!",]],
     [r"(?i)mathematik", ["systemmath",]],
+    [r"(?i)textumkehr", ["textumkehr",]],
     [r"(?i)(.*)", ["Entschuldigung, das verstehe ich nicht. Können Sie das bitte anders formulieren?",]]
 ]

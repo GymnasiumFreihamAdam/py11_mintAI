@@ -25,17 +25,7 @@ except ImportError:
     install("groq")
     from groq import Groq
 
-try:
-    import requests
-except ImportError:
-    install("requests")
-    import requests
 
-try:
-    from bs4 import BeautifulSoup
-except:
-    install("beautifulsoup4, requests")
-    from bs4 import BeautifulSoup
 
 # API-Schlüssel direkt im Skript setzen
 os.environ["GROQ_API_KEY"] = "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"

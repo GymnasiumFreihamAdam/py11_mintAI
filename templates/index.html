@@ -18,7 +18,7 @@
             padding: 10px;
             margin-bottom: 20px;
         }
-        #message {
+        #message1, #message2 {
             width: 80%;
         }
         #terminal {
@@ -32,23 +32,34 @@
     <h1>Chatbot und Virtuelles Terminal</h1>
     <h3 style="color: greenyellow; background-color: yellow; border-radius: 20px;">Ein Projekt des Gymnasium Freihams</h3>
     <div id="chat-box"></div>
-    <input type="text" id="message" placeholder="Ihre Nachricht...">
-    <button onclick="sendMessage()">Senden</button>
+
+    <!-- Eingabefelder für Benutzer 1 und Benutzer 2 -->
+    <input type="text" id="message1" placeholder="Nachricht von Benutzer 1...">
+    <button onclick="sendMessage(1)">Senden von Benutzer 1</button>
+    <br><br>
+    <input type="text" id="message2" placeholder="Nachricht von Benutzer 2...">
+    <button onclick="sendMessage(2)">Senden von Benutzer 2</button>
 
     <h2>Virtuelles Terminal</h2>
     <div id="terminal"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
     <script>
-        // Chatbot-Funktionen
-        async function sendMessage() {
-            const message = document.getElementById("message").value;
+        // Chatbot-Funktionen 
+        async function sendMessage(user) {
+            const message = user === 1 ? document.getElementById("message1").value : document.getElementById("message2").value;
+
+            // Verhindere das Senden einer leeren Nachricht
+            if (!message.trim()) {
+                return;
+            }
+
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ message: message, user: user })
             });
             const data = await response.json();
             const chatBox = document.getElementById("chat-box");
@@ -119,16 +130,22 @@
                 const convertData = await convertResponse.json();
                 if (convertData.result) {
                     chatBox.innerHTML += `<p><strong>Bot:</strong> Konvertiertes Ergebnis: ${convertData.result}</p>`;
-                } else {
-                    chatBox.innerHTML += `<p><strong>Bot:</strong> Fehler: ${convertData.error}</p>`;
                 }
+            }
+            // Nachricht des Benutzers zur Konversation hinzufügen
+            chatBox.innerHTML = '';  // ChatBox zurücksetzen
+            data.conversation.forEach(msg => {
+                chatBox.innerHTML += `<p>${msg}</p>`;  // Alle Nachrichten anzeigen
+            });
+
+            // Eingabefeld zurücksetzen
+            if (user === 1) {
+                document.getElementById("message1").value = '';
             } else {
-                chatBox.innerHTML += `<p><strong>Sie:</strong> ${message}</p>`;
-                chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+                document.getElementById("message2").value = '';
             }
 
-            document.getElementById("message").value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
+            chatBox.scrollTop = chatBox.scrollHeight;  // Scrollen, damit die neueste Nachricht sichtbar ist
         }
 
         // Terminal erstellen

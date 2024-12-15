@@ -37,10 +37,6 @@ except:
     install("beautifulsoup4 requests")
     from bs4 import BeautifulSoup
 
-
-
-
-
 # API-Schlüssel direkt im Skript setzen
 os.environ["GROQ_API_KEY"] = "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"
 api_key = os.environ.get("GROQ_API_KEY")
@@ -55,6 +51,9 @@ chatbot = Chat(dict.pairs, reflections)
 
 app = Flask(__name__)
 
+# Speicher für die Konversation
+conversation = []
+
 # Route für die Hauptseite
 @app.route('/')
 def index():
@@ -65,13 +64,19 @@ def index():
 def chat():
     data = request.json
     user_input = data.get("message", "")
+    user = data.get("user", 1)  # Unterscheidung zwischen Benutzer 1 und Benutzer 2
+
+    # Nachricht zur Konversation hinzufügen
+    conversation.append(f"Benutzer {user}: {user_input}")
     
+    # Verarbeitung der Nachricht durch den Chatbot
     response = chatbot.respond(user_input)
+    
     if response == "Entschuldigung, das verstehe ich nicht. Können Sie das bitte anders formulieren?":
         chat_completion = client.chat.completions.create(
             messages=[
                 {"role": "user", "content": user_input},
-                {"role": "system", "content": "You love math."}
+                {"role": "system", "content": "Du bist Deutschsprachler und kein Angeber."}
             ],
             model="gemma2-9b-it",
             temperature=1,
@@ -80,8 +85,25 @@ def chat():
             stop=None,
         )
         response = chat_completion.choices[0].message.content
+        conversation.append(f"Bot: {response}")
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "user", "content": user_input},
+                {"role": "system", "content": "Du bist Deutschsprachler und kein Angeber."}
+            ],
+            model="gemma-7b-it",
+            temperature=1,
+            max_tokens=230,
+            top_p=1,
+            stop=None,
+        )
+        response = chat_completion.choices[0].message.content
+
+    # Nachricht des Chatbots zur Konversation hinzufügen
+    conversation.append(f"Bot: {response}")
     
-    return jsonify({"response": response})
+    # Die gesamte Konversation zurückgeben
+    return jsonify({"response": response, "conversation": conversation})
 
 # Route für die Text-Umkehrung
 @app.route('/reverse', methods=['POST'])

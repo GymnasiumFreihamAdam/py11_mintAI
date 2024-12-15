@@ -34,7 +34,7 @@ except ImportError:
 try:
     from bs4 import BeautifulSoup
 except:
-    install("beautifulsoup4 requests")
+    install("beautifulsoup4, requests")
     from bs4 import BeautifulSoup
 
 

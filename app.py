@@ -71,7 +71,6 @@ def chat():
         chat_completion = client.chat.completions.create(
             messages=[
                 {"role": "user", "content": user_input},
-                {"role": "system", "content": "You love math."}
             ],
             model="gemma2-9b-it",
             temperature=1,

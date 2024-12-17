@@ -42,7 +42,7 @@ def handle_chat(message):
             messages=[
                 {"role": "user", "content": message}
             ],
-            model="llama3-8b-8192"
+            model="gemma2-9b-it"
         )
         response = chat_completion.choices[0].message.content
     elif response == "systemmath":
@@ -113,7 +113,10 @@ def main():
                 print(f"Bot: {response['response']}")
                 if message == "exit":
                     break
-                
+		elif message == "Hello" or "hello":
+		    print("Hello, I'm here when you need help! What can I do for you?")
+                elif message == "Im bored!" or "I am bored.":
+		    print("Feel free to ask me something!")
 
         elif choice == '2':
             expression = input("Geben Sie den mathematischen Ausdruck ein: ")
@@ -151,10 +154,9 @@ def main():
             else:
                 print(f"Fehler: {result['error']}")
 
-        elif choice == '7':
+        elif choice == '8':
             print("Beenden...")
             break
-
         else:
             print("Ungültige Wahl. Bitte versuchen Sie es erneut.")
 

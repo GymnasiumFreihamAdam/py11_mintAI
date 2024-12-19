@@ -25,7 +25,11 @@ except ImportError:
     install("groq")
     from groq import Groq
 
-
+try:
+    import cryptography
+except ImportError:
+    install("cryptography")
+    import cryptograpy
 
 
 os.environ["GROQ_API_KEY"] = "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"
@@ -66,7 +70,7 @@ def chat():
         chat_completion = client.chat.completions.create(
             messages=[
                 {"role": "user", "content": user_input},
-                {"role": "system", "content": "Du bist Deutschsprachler und kein Angeber."}
+                {"role": "system", "content": "Du rechnest nie ohne zu erklären, was und wie du das rechnest und gibst nie einfach die Lösung"}
             ],
             model="gemma2-9b-it",
             temperature=1,
@@ -75,20 +79,6 @@ def chat():
             stop=None,
         )
         response = chat_completion.choices[0].message.content
-        conversation.append(f"Bot: {response}")
-        chat_completion = client.chat.completions.create(
-            messages=[
-                {"role": "user", "content": user_input},
-                {"role": "system", "content": "Du bist Deutschsprachler und kein Angeber."}
-            ],
-            model="gemma-7b-it",
-            temperature=1,
-            max_tokens=230,
-            top_p=1,
-            stop=None,
-        )
-        response = chat_completion.choices[0].message.content
-
     # Nachricht des Chatbots zur Konversation hinzufügen
     conversation.append(f"Bot: {response}")
     

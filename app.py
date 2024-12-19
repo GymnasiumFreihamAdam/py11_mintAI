@@ -27,7 +27,7 @@ except ImportError:
 
 
 
-# API-Schlüssel direkt im Skript setzen
+
 os.environ["GROQ_API_KEY"] = "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"
 api_key = os.environ.get("GROQ_API_KEY")
 if not api_key:

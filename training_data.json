@@ -158,5 +158,217 @@
     {
         "question": "Wer bist du?",
         "answer": "Ich bin py11, ein Chatbot."
+    },
+    {
+        "question": "Was ist das Repository 'octocat/Hello-World'?",
+        "answer": "https://github.com/octocat/Hello-World"
+    },
+    {
+        "question": "Was ist das Repository 'tensorflow/tensorflow'?",
+        "answer": "https://github.com/tensorflow/tensorflow"
+    },
+    {
+        "question": "Was ist das Repository 'microsoft/vscode'?",
+        "answer": "https://github.com/microsoft/vscode"
+    },
+    {
+        "question": "Was ist das Repository 'facebook/react'?",
+        "answer": "https://github.com/facebook/react"
+    },
+    {
+        "question": "Was ist das Repository 'vuejs/vue'?",
+        "answer": "https://github.com/vuejs/vue"
+    },
+    {
+        "question": "Was ist das Repository 'jquery/jquery'?",
+        "answer": "https://github.com/jquery/jquery"
+    },
+    {
+        "question": "Was ist das Repository 'angular/angular'?",
+        "answer": "https://github.com/angular/angular"
+    },
+    {
+        "question": "Was ist das Repository 'docker/docker'?",
+        "answer": "https://github.com/docker/docker"
+    },
+    {
+        "question": "Was ist das Repository 'kubernetes/kubernetes'?",
+        "answer": "https://github.com/kubernetes/kubernetes"
+    },
+    {
+        "question": "Was ist das Repository 'rails/rails'?",
+        "answer": "https://github.com/rails/rails"
+    },
+    {
+        "question": "Was sind coole Chipsmarken",
+        "answer": "Ja!, Doritos, Pringels..."
+    },
+    {
+        "question": "Was sind schlechte Chipsmarken",
+        "answer": "Gut und Günstig von Edeka"
+    },
+    {
+        "question": "Kennst du Windows 11?",
+        "answer": "Ja, das neueste Betriebssystem von Microsoft."
+    },
+    {
+        "question": "Was ist das Repository 'octocat/Hello-World'?",
+        "answer": "https://github.com/octocat/Hello-World"
+    },
+    {
+        "question": "Was ist das Repository 'tensorflow/tensorflow'?",
+        "answer": "https://github.com/tensorflow/tensorflow"
+    },
+    {
+        "question": "Was ist das Repository 'microsoft/vscode'?",
+        "answer": "https://github.com/microsoft/vscode"
+    },
+    {
+        "question": "Was ist das Repository 'facebook/react'?",
+        "answer": "https://github.com/facebook/react"
+    },
+    {
+        "question": "Was ist das Repository 'vuejs/vue'?",
+        "answer": "https://github.com/vuejs/vue"
+    },
+    {
+        "question": "Was ist das Repository 'jquery/jquery'?",
+        "answer": "https://github.com/jquery/jquery"
+    },
+    {
+        "question": "Was ist das Repository 'angular/angular'?",
+        "answer": "https://github.com/angular/angular"
+    },
+    {
+        "question": "Was ist das Repository 'docker/docker'?",
+        "answer": "https://github.com/docker/docker"
+    },
+    {
+        "question": "Was ist das Repository 'kubernetes/kubernetes'?",
+        "answer": "https://github.com/kubernetes/kubernetes"
+    },
+    {
+        "question": "Was ist das Repository 'rails/rails'?",
+        "answer": "https://github.com/rails/rails"
+    },
+    {
+        "question": "Was bedeutet 'Oh no my table is broken!'",
+        "answer": "Oh nein, mein Tisch ist kapput!"
+    },
+    {
+        "question": "Was bist du?",
+        "answer": "Ich bin eine KI"
+    },
+    {
+        "question": "Was ist das Repository 'octocat/Hello-World'?",
+        "answer": "https://github.com/octocat/Hello-World"
+    },
+    {
+        "question": "Was ist das Repository 'tensorflow/tensorflow'?",
+        "answer": "https://github.com/tensorflow/tensorflow"
+    },
+    {
+        "question": "Was ist das Repository 'microsoft/vscode'?",
+        "answer": "https://github.com/microsoft/vscode"
+    },
+    {
+        "question": "Was ist das Repository 'facebook/react'?",
+        "answer": "https://github.com/facebook/react"
+    },
+    {
+        "question": "Was ist das Repository 'vuejs/vue'?",
+        "answer": "https://github.com/vuejs/vue"
+    },
+    {
+        "question": "Was ist das Repository 'jquery/jquery'?",
+        "answer": "https://github.com/jquery/jquery"
+    },
+    {
+        "question": "Was ist das Repository 'angular/angular'?",
+        "answer": "https://github.com/angular/angular"
+    },
+    {
+        "question": "Was ist das Repository 'docker/docker'?",
+        "answer": "https://github.com/docker/docker"
+    },
+    {
+        "question": "Was ist das Repository 'kubernetes/kubernetes'?",
+        "answer": "https://github.com/kubernetes/kubernetes"
+    },
+    {
+        "question": "Was ist das Repository 'rails/rails'?",
+        "answer": "https://github.com/rails/rails"
+    },
+    {
+        "question": "Was ist die schlechteste Chipsmarke",
+        "answer": "Gut und Günstig von EDEKA"
+    },
+    {
+        "question": "Was ist das Repository 'octocat/Hello-World'?",
+        "answer": "https://github.com/octocat/Hello-World"
+    },
+    {
+        "question": "Was ist das Repository 'tensorflow/tensorflow'?",
+        "answer": "https://github.com/tensorflow/tensorflow"
+    },
+    {
+        "question": "Was ist das Repository 'microsoft/vscode'?",
+        "answer": "https://github.com/microsoft/vscode"
+    },
+    {
+        "question": "Was ist das Repository 'facebook/react'?",
+        "answer": "https://github.com/facebook/react"
+    },
+    {
+        "question": "Was ist das Repository 'vuejs/vue'?",
+        "answer": "https://github.com/vuejs/vue"
+    },
+    {
+        "question": "Was ist das Repository 'jquery/jquery'?",
+        "answer": "https://github.com/jquery/jquery"
+    },
+    {
+        "question": "Was ist das Repository 'angular/angular'?",
+        "answer": "https://github.com/angular/angular"
+    },
+    {
+        "question": "Was ist das Repository 'docker/docker'?",
+        "answer": "https://github.com/docker/docker"
+    },
+    {
+        "question": "Was ist das Repository 'kubernetes/kubernetes'?",
+        "answer": "https://github.com/kubernetes/kubernetes"
+    },
+    {
+        "question": "Was ist das Repository 'rails/rails'?",
+        "answer": "https://github.com/rails/rails"
+    },
+    {
+        "question": "Für was steht nltk?",
+        "answer": "nltk steht für Natural Language ToolKit."
+    },
+    {
+        "question": "print A",
+        "answer": "A"
+    },
+    {
+        "question": "print B",
+        "answer": "B"
+    },
+    {
+        "question": "print C",
+        "answer": "C"
+    },
+    {
+        "question": "print D",
+        "answer": "D"
+    },
+    {
+        "question": "print E",
+        "answer": "E"
+    },
+    {
+        "question": "print F",
+        "answer": "F"
     }
 ]

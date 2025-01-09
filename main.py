@@ -1,11 +1,6 @@
 import subprocess
 import sys
-import json
-import nltk
-import numpy as np
-import random
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC
+
 
 # Installiere notwendige Bibliotheken
 def install(package):
@@ -13,7 +8,16 @@ def install(package):
 
 install("nltk")
 install("scikit-learn")
-
+install("numpy")
+install("requests")
+import json
+import nltk
+import numpy as np
+import random
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import SVC
+import os
+import requests
 # Lade NLTK-Daten
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -41,6 +45,17 @@ def load_training_data(file_path='training_data.json'):
         return json.load(file)
 
 training_data = load_training_data()
+
+# Lade zusätzlichen Datensatz aus einer anderen JSON-Datei
+def load_additional_data(file_path='githubrepos.json'):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return json.load(file)
+
+additional_data = load_additional_data()
+for entry in additional_data:
+    question = f"Was ist das Repository '{entry['name']}'?"
+    answer = entry['url']
+    training_data.append({"question": question, "answer": answer})
 
 # Überprüfen, ob `training_data` nicht leer ist
 if not training_data:
@@ -73,8 +88,62 @@ def preprocess_text(text):
         "named_entities": named_entities
     }
 
+# Funktion zur Evaluierung mathematischer Ausdrücke
+def evaluate_math_expression(expression):
+    try:
+        result = eval(expression)
+        return f"Das Ergebnis ist: {result}"
+    except Exception as e:
+        return f"Fehler beim Auswerten des Ausdrucks: {str(e)}"
+
+# Funktion zum Öffnen von VS Code
+def open_vscode():
+    try:
+        os.system("code")
+        return "VS Code wird geöffnet."
+    except Exception as e:
+        return f"Fehler beim Öffnen von VS Code: {str(e)}"
+
+# Funktion zur Durchführung einer Websuche mit DuckDuckGo
+def search_web(query):
+    try:
+        url = "https://api.duckduckgo.com/"
+        params = {"q": query, "format": "json"}
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        search_results = response.json()
+        
+        # Überprüfen, ob Ergebnisse vorhanden sind
+        if "RelatedTopics" in search_results and len(search_results["RelatedTopics"]) > 0:
+            results = [f"- {topic['Text']}\n  {topic['FirstURL']}" for topic in search_results["RelatedTopics"] if "Text" in topic and "FirstURL" in topic]
+            if len(results) == 0:
+                return "Keine relevanten Ergebnisse gefunden."
+            
+            # Formatiere die Ergebnisse
+            formatted_results = "\n".join(results)
+            return f"Suchergebnisse:\n{formatted_results}"
+        else:
+            return "Keine Ergebnisse gefunden."
+        
+    except Exception as e:
+        return f"Fehler bei der Websuche: {str(e)}"
+
 # Funktion zur Beantwortung von Fragen
 def chatbot_response(question):
+    # Überprüfen, ob die Frage ein mathematischer Ausdruck ist
+    if question.startswith("Berechne"):
+        expression = question.split("Berechne")[-1].strip()
+        return evaluate_math_expression(expression), None
+    
+    # Überprüfen, ob die Frage das Öffnen von VS Code betrifft
+    if question.lower() in ["öffne vs code", "code"]:
+        return open_vscode(), None
+    
+    # Überprüfen, ob die Frage eine Websuche erfordert
+    if question.lower().startswith("suche nach"):
+        query = question.split("suche nach")[-1].strip()
+        return search_web(query), None
+
     question_tfidf = vectorizer.transform([question])
     try:
         response = model.predict(question_tfidf)[0]
@@ -127,7 +196,7 @@ if __name__ == "__main__":
             learn_from_interaction(user_input, new_answer)
             response = new_answer
         else:
-            response = validate_response(user_input, response)
+            response is validate_response(user_input, response)
         
         print("Chatbot:", response)
         print("NLP Info:", nlp_info)

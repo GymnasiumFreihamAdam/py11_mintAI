@@ -1,3 +1,5 @@
+#©Adam Basly. All rights reservered. 
+#Any distribution without naming the #author will be punished. 
 import subprocess
 import sys
 

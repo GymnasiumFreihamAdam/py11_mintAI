@@ -1,8 +1,11 @@
 #©Adam Basly. All rights reservered. 
 #Any distribution without naming the author will be punished. 
+activation=False
 import subprocess
 import sys
 
+if activation==False:
+    sys.exit("Error-code: 0x43R43DESACTIVATED36")
 
 # Installiere notwendige Bibliotheken
 def install(package):

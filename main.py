@@ -1,6 +1,7 @@
-#©Adam Basly. All rights reservered. 
+# main.py
+#©Adam Basly. All rights reserved. 
 #Any distribution without naming the author will be punished. 
-activation=False
+activation=True
 import subprocess
 import sys
 
@@ -37,6 +38,8 @@ from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag, ne_chunk
 
+from data import load_training_data, load_and_append_data
+
 # Setze Seed für Reproduzierbarkeit
 def set_seed(seed):
     np.random.seed(seed)
@@ -45,24 +48,19 @@ def set_seed(seed):
 set_seed(42)  # Beispiel-Seed
 
 # Lade das Trainingsdatenset aus der JSON-Datei
-def load_training_data(file_path='training_data.json'):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
-
 training_data = load_training_data()
+training_data = load_and_append_data(training_data, 'comics.json', 'comicSeries')
+training_data = load_and_append_data(training_data, 'dishes.json', 'dishes')
+training_data = load_and_append_data(training_data, 'books.json', 'books')
+training_data = load_and_append_data(training_data, 'movies.json', 'movies')
+training_data = load_and_append_data(training_data, 'fruits.json', 'fruits')
+training_data = load_and_append_data(training_data, 'animals.json', 'animals')
+training_data = load_and_append_data(training_data, 'windows.json', 'windowsVersions')
+training_data = load_and_append_data(training_data, 'deutsch6klassebayern.json', 'deutsch6klassebayern')
+training_data = load_and_append_data(training_data, 'superMarioGames.json', 'superMarioGames')
+training_data = load_and_append_data(training_data, 'informatik6klassebayern.json', 'informatik6klassebayern')
+training_data = load_and_append_data(training_data, 'mathematik6klassebayern.json', 'mathematik6klassebayern')
 
-# Lade zusätzlichen Datensatz aus einer anderen JSON-Datei
-def load_additional_data(file_path='githubrepos.json'):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
-
-additional_data = load_additional_data()
-for entry in additional_data:
-    question = f"Was ist das Repository '{entry['name']}'?"
-    answer = entry['url']
-    training_data.append({"question": question, "answer": answer})
-
-# Überprüfen, ob `training_data` nicht leer ist
 if not training_data:
     raise ValueError("Das Trainingsdatenset ist leer. Bitte überprüfen Sie die Quelle der Daten.")
 
@@ -129,7 +127,6 @@ def search_web(query):
             return f"Suchergebnisse:\n{formatted_results}"
         else:
             return "Keine Ergebnisse gefunden."
-        
     except Exception as e:
         return f"Fehler bei der Websuche: {str(e)}"
 
@@ -201,7 +198,7 @@ if __name__ == "__main__":
             learn_from_interaction(user_input, new_answer)
             response = new_answer
         else:
-            response is validate_response(user_input, response)
+            response = validate_response(user_input, response)
         
         print("Chatbot:", response)
         print("NLP Info:", nlp_info)

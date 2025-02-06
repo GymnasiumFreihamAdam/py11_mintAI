@@ -1,13 +1,22 @@
-# data.py
 import json
 
-def load_training_data(file_path='training_data.json'):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
+def load_training_data():
+    if 'training_data' in globals():
+        return globals()['training_data']
+    else:
+        with open('training_data.json', 'r', encoding='utf-8') as file:
+            return json.load(file)
 
 def load_json_data(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
+    if file_path == 'training_data.json' and 'training_data' in globals():
+        return globals()['training_data']
+    else:
+        response = requests.get(file_path)
+        return response.json()
+
+def append_data(training_data, new_data, key):
+    # Your existing append_data code
+    pass
 
 def append_data(training_data, new_data, key):
     if key == "comicSeries":
@@ -77,7 +86,8 @@ def append_data(training_data, new_data, key):
 
 
 
-
 def load_and_append_data(training_data, file_path, key):
     new_data = load_json_data(file_path)
     return append_data(training_data, new_data, key)
+
+

@@ -49,17 +49,17 @@ set_seed(42)  # Beispiel-Seed
 
 # Lade das Trainingsdatenset aus der JSON-Datei
 training_data = load_training_data()
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/comics.json', 'comicSeries')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/dishes.json', 'dishes')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/books.json', 'books')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/movies.json', 'movies')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/fruits.json', 'fruits')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/animals.json', 'animals')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/windows.json', 'windowsVersions')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/deutsch6klassebayern.json', 'deutsch6klassebayern')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/superMarioGames.json', 'superMarioGames')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/informatik6klassebayern.json', 'informatik6klassebayern')
-training_data = load_and_append_data(training_data, 'https://raw.githubusercontent.com/Gymnasium-Freiham/MINT-AI/refs/heads/main/mathematik6klassebayern.json', 'mathematik6klassebayern')
+training_data = load_and_append_data(training_data, 'comics.json', 'comicSeries')
+training_data = load_and_append_data(training_data, 'dishes.json', 'dishes')
+training_data = load_and_append_data(training_data, 'books.json', 'books')
+training_data = load_and_append_data(training_data, 'movies.json', 'movies')
+training_data = load_and_append_data(training_data, 'fruits.json', 'fruits')
+training_data = load_and_append_data(training_data, 'animals.json', 'animals')
+training_data = load_and_append_data(training_data, 'windows.json', 'windowsVersions')
+training_data = load_and_append_data(training_data, 'deutsch6klassebayern.json', 'deutsch6klassebayern')
+training_data = load_and_append_data(training_data, 'superMarioGames.json', 'superMarioGames')
+training_data = load_and_append_data(training_data, 'informatik6klassebayern.json', 'informatik6klassebayern')
+training_data = load_and_append_data(training_data, 'mathematik6klassebayern.json', 'mathematik6klassebayern')
 
 if not training_data:
     raise ValueError("Das Trainingsdatenset ist leer. Bitte überprüfen Sie die Quelle der Daten.")

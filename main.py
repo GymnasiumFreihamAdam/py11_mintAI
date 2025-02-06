@@ -78,18 +78,21 @@ stemmer = PorterStemmer()
 lemmatizer = WordNetLemmatizer()
 
 def preprocess_text(text):
-    tokens = word_tokenize(text)
-    stemmed = [stemmer.stem(token) for token in tokens]
-    lemmatized = [lemmatizer.lemmatize(token) for token in tokens]
-    pos_tags = pos_tag(tokens)
-    named_entities = ne_chunk(pos_tags)
-    return {
-        "tokens": tokens,
-        "stemmed": stemmed,
-        "lemmatized": lemmatized,
-        "pos_tags": pos_tags,
-        "named_entities": named_entities
-    }
+    try:
+        tokens = word_tokenize(text)
+        stemmed = [stemmer.stem(token) for token in tokens]
+        lemmatized = [lemmatizer.lemmatize(token) for token in tokens]
+        pos_tags = pos_tag(tokens)
+        named_entities = ne_chunk(pos_tags)
+        return {
+            "tokens": tokens,
+            "stemmed": stemmed,
+            "lemmatized": lemmatized,
+            "pos_tags": pos_tags,
+            "named_entities": named_entities
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 # Funktion zur Evaluierung mathematischer Ausdrücke
 def evaluate_math_expression(expression):
@@ -132,27 +135,34 @@ def search_web(query):
 
 # Funktion zur Beantwortung von Fragen
 def chatbot_response(question):
-    # Überprüfen, ob die Frage ein mathematischer Ausdruck ist
-    if question.startswith("Berechne"):
-        expression = question.split("Berechne")[-1].strip()
-        return evaluate_math_expression(expression), None
-    
-    # Überprüfen, ob die Frage das Öffnen von VS Code betrifft
-    if question.lower() in ["öffne vs code", "code"]:
-        return open_vscode(), None
-    
-    # Überprüfen, ob die Frage eine Websuche erfordert
-    if question.lower().startswith("suche nach"):
-        query = question.split("suche nach")[-1].strip()
-        return search_web(query), None
-
-    question_tfidf = vectorizer.transform([question])
     try:
+        # Überprüfen, ob die Frage ein mathematischer Ausdruck ist
+        if question.startswith("Berechne"):
+            expression = question.split("Berechne")[-1].strip()
+            return evaluate_math_expression(expression), None
+        
+        # Überprüfen, ob die Frage das Öffnen von VS Code betrifft
+        if question.lower() in ["öffne vs code", "code"]:
+            return open_vscode(), None
+        
+        # Überprüfen, ob die Frage eine Websuche erfordert
+        if question.lower().startswith("suche nach"):
+            query = question.split("suche nach")[-1].strip()
+            return search_web(query), None
+        
+        # Überprüfen, ob die Frage eine Begrüßung ist
+        greetings = ["hallo", "hi", "hey", "guten tag"]
+        if question.lower() in greetings:
+            return "Hallo! Wie kann ich Ihnen helfen?", None
+        
+        question_tfidf = vectorizer.transform([question])
+        
         response = model.predict(question_tfidf)[0]
         nlp_info = preprocess_text(question)
+        
         return response, nlp_info
-    except:
-        return None, None
+    except Exception as e:
+        return f"Fehler bei der Verarbeitung der Frage: {str(e)}", None
 
 # Funktion zum Hinzufügen von neuen Fragen und Antworten
 def add_to_training_data(question, answer, file_path='training_data.json'):

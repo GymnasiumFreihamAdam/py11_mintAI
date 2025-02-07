@@ -1,3 +1,4 @@
+![image](./logo.png)
 # MINT AI
 An AI for chatting.
 Projektstammbaum:

@@ -1,0 +1,90 @@
+# -*- coding: utf-8 -*-
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QTextEdit, QMessageBox
+from PyQt5.QtGui import QPixmap, QFont, QPalette, QColor
+from PyQt5.QtCore import QProcess, Qt
+import subprocess
+
+class LauncherGUI(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+        
+    def initUI(self):
+        self.setWindowTitle('MINT AI Launcher')
+        self.setGeometry(100, 100, 800, 600)
+        
+        # Hintergrundfarbe
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        palette.setColor(QPalette.Window, QColor(50, 50, 50))
+        self.setPalette(palette)
+        
+        # Layout
+        layout = QVBoxLayout()
+        
+        # Logo (falls vorhanden)
+        self.logo_label = QLabel(self)
+        self.logo_pixmap = QPixmap("./logo.png")
+        self.logo_pixmap = self.logo_pixmap.scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(self.logo_pixmap)
+        self.logo_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.logo_label)
+        
+        # Titel
+        self.title_label = QLabel('Welcome to MINT AI Launcher!', self)
+        self.title_label.setAlignment(Qt.AlignCenter)
+        self.title_label.setFont(QFont('Arial', 24))
+        self.title_label.setStyleSheet("color: white;")
+        layout.addWidget(self.title_label)
+        
+        # Button zum Starten des Hauptprogramms
+        self.start_button = QPushButton('Start MINT AI', self)
+        self.start_button.setFont(QFont('Arial', 18))
+        self.start_button.setStyleSheet("background-color: green; color: white; padding: 10px;")
+        self.start_button.clicked.connect(self.start_program)
+        layout.addWidget(self.start_button)
+        
+        # Button zum Beenden
+        self.exit_button = QPushButton('Beenden', self)
+        self.exit_button.setFont(QFont('Arial', 18))
+        self.exit_button.setStyleSheet("background-color: red; color: white; padding: 10px;")
+        self.exit_button.clicked.connect(self.close)
+        layout.addWidget(self.exit_button)
+        
+        # Textbereich für Ausgabe
+        self.text_area = QTextEdit(self)
+        self.text_area.setReadOnly(True)
+        self.text_area.setStyleSheet("background-color: black; color: white;")
+        layout.addWidget(self.text_area)
+        
+        # Setze Layout
+        layout.setAlignment(Qt.AlignCenter)
+        self.setLayout(layout)
+        
+        # QProcess zum Ausführen des Skripts
+        self.process = QProcess(self)
+        self.process.readyReadStandardOutput.connect(self.read_output)
+        self.process.readyReadStandardError.connect(self.read_error)
+        
+    def start_program(self):
+        # Hauptprogramm starten
+        self.text_area.append("Das Hauptprogramm wird gestartet...")  # Ausgabe im Textbereich
+        try:
+            self.process.start('python', ['test.py'])
+        except Exception as e:
+            QMessageBox.critical(self, "Fehler", f"Fehler beim Starten des Skripts: {e}")
+        
+    def read_output(self):
+        output = self.process.readAllStandardOutput().data().decode('latin-1')
+        self.text_area.append(output)
+        
+    def read_error(self):
+        error = self.process.readAllStandardError().data().decode('latin-1')
+        self.text_area.append(error)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    launcher = LauncherGUI()
+    launcher.show()
+    sys.exit(app.exec_())

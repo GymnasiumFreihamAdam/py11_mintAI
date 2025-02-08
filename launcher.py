@@ -45,6 +45,13 @@ class LauncherGUI(QWidget):
         self.start_button.clicked.connect(self.start_program)
         layout.addWidget(self.start_button)
         
+        # Button zum Suchen von Updates
+        self.update_button = QPushButton('Updates suchen', self)
+        self.update_button.setFont(QFont('Arial', 18))
+        self.update_button.setStyleSheet("background-color: blue; color: white; padding: 10px;")
+        self.update_button.clicked.connect(self.check_updates)
+        layout.addWidget(self.update_button)
+        
         # Button zum Beenden
         self.exit_button = QPushButton('Beenden', self)
         self.exit_button.setFont(QFont('Arial', 18))
@@ -52,7 +59,7 @@ class LauncherGUI(QWidget):
         self.exit_button.clicked.connect(self.close)
         layout.addWidget(self.exit_button)
         
-        # Textbereich für Ausgabe
+        # Textbereich fÃ¼r Ausgabe
         self.text_area = QTextEdit(self)
         self.text_area.setReadOnly(True)
         self.text_area.setStyleSheet("background-color: black; color: white;")
@@ -62,7 +69,7 @@ class LauncherGUI(QWidget):
         layout.setAlignment(Qt.AlignCenter)
         self.setLayout(layout)
         
-        # QProcess zum Ausführen des Skripts
+        # QProcess zum AusfÃ¼hren des Skripts
         self.process = QProcess(self)
         self.process.readyReadStandardOutput.connect(self.read_output)
         self.process.readyReadStandardError.connect(self.read_error)
@@ -74,6 +81,17 @@ class LauncherGUI(QWidget):
             self.process.start('python', ['test.py'])
         except Exception as e:
             QMessageBox.critical(self, "Fehler", f"Fehler beim Starten des Skripts: {e}")
+    
+    def check_updates(self):
+        # Updates suchen
+        self.text_area.append("Nach Updates suchen...")  # Ausgabe im Textbereich
+        try:
+            result = subprocess.run(['python', 'update.py'], capture_output=True, text=True)
+            self.text_area.append(result.stdout)
+            if result.returncode != 0:
+                self.text_area.append(result.stderr)
+        except Exception as e:
+            QMessageBox.critical(self, "Fehler", f"Fehler beim Suchen nach Updates: {e}")
         
     def read_output(self):
         output = self.process.readAllStandardOutput().data().decode('latin-1')
